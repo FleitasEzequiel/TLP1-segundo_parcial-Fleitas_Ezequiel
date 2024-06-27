@@ -69,3 +69,14 @@ app.post('/products',(req,res)=>{
     baseDatos.push(datos)
     res.send(baseDatos)
 })
+app.delete('/products/:id',(req,res)=>{
+    const id = req.params.id
+    const indice = baseDatos.findIndex((fruta)=>fruta.id==id)
+    console.log(indice)
+    if (indice == -1){
+        res.status(404).send('No sé encontró el producto')
+    }else{
+    baseDatos.splice(indice,1)
+    res.send(baseDatos)
+    }
+})
