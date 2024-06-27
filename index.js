@@ -45,10 +45,13 @@ app.listen(3000,()=>{
     console.log('Server está ejecutandose en el puerto 3000')
 })
 //Rutas
+
+//Productos en general
 app.get('/products',(req,res)=>{
     res.send(baseDatos)
 })
 
+//Productos por Id
 app.get('/products/:id',(req,res)=>{
     const id = req.params.id
     const indice = baseDatos.findIndex((fruta)=>fruta.id==id) 
@@ -58,6 +61,8 @@ app.get('/products/:id',(req,res)=>{
         res.send(baseDatos[indice])
     }
 })
+
+//Crear productos
 app.post('/products',(req,res)=>{
     const id = baseDatos.length + 1
     const {name, quantity, price} = req.body
@@ -70,6 +75,8 @@ app.post('/products',(req,res)=>{
     baseDatos.push(datos)
     res.send(baseDatos)
 })
+
+//Eliminar productos
 app.delete('/products/:id',(req,res)=>{
     const id = req.params.id
     const indice = baseDatos.findIndex((fruta)=>fruta.id==id)
@@ -78,9 +85,16 @@ app.delete('/products/:id',(req,res)=>{
         res.status(404).send('No sé encontró el producto')
     }else{
     baseDatos.splice(indice,1)
+    baseDatos.forEach(dato =>{
+        if (dato.id > indice){
+            dato.id = dato.id - 1
+        }
+    })
     res.send(baseDatos)
     }
 })
+
+//Editar productos
 app.put('/products/:id',(req,res)=>{
     const id = req.params.id
     const { name, quantity, price} = req.body
